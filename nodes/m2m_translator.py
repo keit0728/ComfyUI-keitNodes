@@ -4,15 +4,16 @@ from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 import langid
 import os
 import folder_paths
+from huggingface_hub import snapshot_download
 
 MODEL_CONFIGS = {
     "418M": {
         "model_name": "facebook/m2m100_418M",
-        "cache_dir": "models--facebook--m2m100_418M",
+        "cache_dir": "m2m100_418M",
     },
     "1.2B": {
         "model_name": "facebook/m2m100_1.2B",
-        "cache_dir": "models--facebook--m2m100_1.2B",
+        "cache_dir": "m2m100_1.2B",
     },
 }
 
@@ -139,37 +140,57 @@ class M2MTranslator:
     FUNCTION = "translate"
     CATEGORY = "🌍 Translation/M2M-100"
 
+    def ensure_model_downloaded(self, model_size) -> str:
+        """モデルを事前にダウンロードし、ローカルパスを返す"""
+        model_name = MODEL_CONFIGS[model_size]["model_name"]
+        cache_path = os.path.join(
+            self.base_cache_dir,
+            MODEL_CONFIGS[model_size]["cache_dir"],
+        )
+
+        # モデルが既にダウンロード済みかチェック
+        if os.path.exists(cache_path) and os.listdir(cache_path):
+            print(f"Model {model_size} already exists at {cache_path}")
+            return cache_path
+
+        # モデルをダウンロード
+        print(f"Downloading M2M-100 {model_size} model to {cache_path}...")
+        downloaded_path = snapshot_download(
+            repo_id=model_name,
+            local_dir=cache_path,
+            local_dir_use_symlinks=False,  # シンボリックリンクを使わずに実際のファイルをコピー
+        )
+        print(f"Model downloaded to {downloaded_path}")
+        return cache_path
+
     def load_model(self, model_size) -> None:
         """モデルを遅延ロード（初回のみ）"""
         model_name = MODEL_CONFIGS[model_size]["model_name"]
-        cache_path = os.path.join(
-            self.base_cache_dir, MODEL_CONFIGS[model_size]["cache_dir"]
-        )
 
         # モデルが既にロードされている場合は何もしない
         if self._model is not None and self._current_model_name == model_name:
             return
 
+        # モデルを事前にダウンロード
+        local_model_path = self.ensure_model_downloaded(model_size)
+
         # モデルロード処理
-        print(f"Loading M2M-100 {model_size} model...")
+        print(f"Loading M2M-100 {model_size} model from {local_model_path}...")
 
         if torch.cuda.is_available():
             self._model = M2M100ForConditionalGeneration.from_pretrained(
-                model_name,
+                local_model_path,  # ローカルパスを指定
                 torch_dtype=torch.float16,
                 device_map="auto",
-                cache_dir=cache_path,
             ).cuda()
         else:
             self._model = M2M100ForConditionalGeneration.from_pretrained(
-                model_name,
+                local_model_path,  # ローカルパスを指定
                 torch_dtype=torch.float32,
-                cache_dir=cache_path,
             )
 
         self._tokenizer = M2M100Tokenizer.from_pretrained(
-            model_name,
-            cache_dir=cache_path,
+            local_model_path,  # ローカルパスを指定
         )
         self._current_model_name = model_name
         print("Model loaded successfully!")
