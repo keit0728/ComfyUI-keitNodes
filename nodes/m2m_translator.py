@@ -29,7 +29,6 @@ class M2MTranslator:
     _current_model_name: str | None = None
 
     def __init__(self):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.base_cache_dir = os.path.join(folder_paths.models_dir, "keit-nodes")
 
     @classmethod
@@ -128,6 +127,7 @@ class M2MTranslator:
                     {"default": "en"},  # auto_detectを除外
                 ),
                 "model_size": (["418M", "1.2B"], {"default": "418M"}),
+                "device": (["auto", "cpu", "cuda"], {"default": "auto"}),
             },
             "optional": {
                 "num_beams": ("INT", {"default": 5, "min": 1, "max": 10, "step": 1}),
@@ -163,21 +163,36 @@ class M2MTranslator:
         print(f"Model downloaded to {downloaded_path}")
         return cache_path
 
-    def load_model(self, model_size) -> None:
+    def load_model(self, model_size, device) -> None:
         """モデルを遅延ロード（初回のみ）"""
         model_name = MODEL_CONFIGS[model_size]["model_name"]
 
-        # モデルが既にロードされている場合は何もしない
-        if self._model is not None and self._current_model_name == model_name:
+        # デバイス決定
+        if device == "auto":
+            actual_device = "cuda" if torch.cuda.is_available() else "cpu"
+        elif device == "cuda":
+            if not torch.cuda.is_available():
+                print("Warning: CUDA is not available, falling back to CPU")
+                actual_device = "cpu"
+            else:
+                actual_device = "cuda"
+        else:
+            actual_device = "cpu"
+
+        # モデルとデバイスの組み合わせが既にロードされている場合は何もしない
+        model_key = f"{model_name}_{actual_device}"
+        if self._model is not None and self._current_model_name == model_key:
             return
 
         # モデルを事前にダウンロード
         local_model_path = self.ensure_model_downloaded(model_size)
 
         # モデルロード処理
-        print(f"Loading M2M-100 {model_size} model from {local_model_path}...")
+        print(
+            f"Loading M2M-100 {model_size} model from {local_model_path} on {actual_device}..."
+        )
 
-        if torch.cuda.is_available():
+        if actual_device == "cuda":
             self._model = M2M100ForConditionalGeneration.from_pretrained(
                 local_model_path,  # ローカルパスを指定
                 torch_dtype=torch.float16,
@@ -192,8 +207,9 @@ class M2MTranslator:
         self._tokenizer = M2M100Tokenizer.from_pretrained(
             local_model_path,  # ローカルパスを指定
         )
-        self._current_model_name = model_name
-        print("Model loaded successfully!")
+        self._current_model_name = model_key
+        self.current_device = actual_device
+        print(f"Model loaded successfully on {actual_device}!")
 
     def detect_language(self, text) -> tuple[str, float]:
         """言語を自動検出"""
@@ -206,6 +222,7 @@ class M2MTranslator:
         source_language,
         target_language,
         model_size,
+        device,
         num_beams=5,
     ):
         """翻訳"""
@@ -217,10 +234,6 @@ class M2MTranslator:
                 1.0,
             )
 
-        # 同じ言語の場合はそのまま返す
-        if source_language == target_language:
-            return (text, source_language, confidence)
-
         # 言語自動検出
         if source_language == "auto_detect":
             source_language, confidence = self.detect_language(text)
@@ -230,15 +243,19 @@ class M2MTranslator:
         else:
             confidence = 1.0
 
+        # 同じ言語の場合はそのまま返す
+        if source_language == target_language:
+            return (text, source_language, confidence)
+
         # 翻訳実行
-        self.load_model(model_size)
+        self.load_model(model_size, device)
         self._tokenizer.src_lang = source_language
         inputs = self._tokenizer(
             text,
             return_tensors="pt",
             padding=True,
             truncation=True,
-        ).to(self.device)
+        ).to(self.current_device)
         with torch.no_grad():
             generated_tokens = self._model.generate(
                 **inputs,
