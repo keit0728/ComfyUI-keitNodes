@@ -209,6 +209,14 @@ class M2MTranslator:
         num_beams=5,
     ):
         """翻訳"""
+        # テキストが空白の場合はそのまま返す
+        if not text or text.strip() == "":
+            return (
+                text,
+                source_language if source_language != "auto_detect" else "unknown",
+                1.0,
+            )
+
         # 同じ言語の場合はそのまま返す
         if source_language == target_language:
             return (text, source_language, confidence)
