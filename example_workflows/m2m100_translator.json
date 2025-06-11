@@ -1,0 +1,170 @@
+{
+  "id": "73343bb2-df3e-4333-a8a2-4e987d29ebf8",
+  "revision": 0,
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "M2MTranslator",
+      "pos": [
+        -1396.73974609375,
+        159.21759033203125
+      ],
+      "size": [
+        400,
+        224
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "translated_text",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "detected_language",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "confidence",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "keit0728/ComfyUI-keitNodes",
+        "ver": "77cf7678452c5590fad89b664bd3b8f14a55e3ac",
+        "Node name for S&R": "M2MTranslator"
+      },
+      "widgets_values": [
+        "",
+        "auto_detect",
+        "en",
+        "418M",
+        5
+      ]
+    },
+    {
+      "id": 3,
+      "type": "easy showAnything",
+      "pos": [
+        -952.0576782226562,
+        163.2786102294922
+      ],
+      "size": [
+        324.7765808105469,
+        98.33563232421875
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "7ef0612ce7552968146ed41f5863a1638bf33412",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "A red-haired girl is walking straight towards the camera."
+      ]
+    },
+    {
+      "id": 2,
+      "type": "DF_Text_Box",
+      "pos": [
+        -1854.6202392578125,
+        219.11770629882812
+      ],
+      "size": [
+        393.9084777832031,
+        88
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "derfuu_comfyui_moddednodes",
+        "ver": "d0905bed31249f2bd0814c67585cf4fe3c77c015",
+        "Node name for S&R": "DF_Text_Box"
+      },
+      "widgets_values": [
+        "赤い髪の女の子がカメラに向かって真直ぐ歩いている"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9849732675807974,
+      "offset": [
+        2111.984916149701,
+        89.0097827403284
+      ]
+    },
+    "frontendVersion": "1.20.7",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

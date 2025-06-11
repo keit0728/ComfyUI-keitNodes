@@ -2,4 +2,3 @@ __pycache__/
 .vscode/
 tmp/
 venv/
-models/
