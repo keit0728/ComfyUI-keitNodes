@@ -2,16 +2,16 @@ from typing import Tuple
 import math
 from comfy.utils import common_upscale
 
-# 最大ピクセル数制限
-DEFAULT_MAX_PIXELS = 728320  # 1138x640相当
+# Maximum pixel count limit
+DEFAULT_MAX_PIXELS = 728320  # Equivalent to 1138x640
 
 
 class PixelLimitResizer:
     """
-    アスペクト比維持・ピクセル数制限・16の倍数解像度リサイザー
-    入力画像のアスペクト比を維持しつつ、ピクセル数がmax_pixels以下で
-    16の倍数の解像度の中で最もピクセル数が多い解像度にリサイズします
-    3D VAEの時空間圧縮に最適化されています
+    Aspect ratio preserving pixel count limiter with 16-pixel multiple resolution resizer
+    Resizes input images while maintaining aspect ratio, staying within max_pixels limit,
+    and using resolutions that are multiples of 16 for maximum pixel count.
+    Optimized for 3D VAE spatiotemporal compression.
     """
 
     upscale_methods = ["nearest-exact", "bilinear", "area", "bicubic", "lanczos"]
@@ -50,45 +50,45 @@ class PixelLimitResizer:
     CATEGORY = "🖼️ Image/Resize"
 
     def calculate_aspect_ratio(self, width: int, height: int) -> float:
-        """アスペクト比を計算"""
+        """Calculate aspect ratio"""
         return width / height
 
     def find_optimal_resolution(
         self, original_width: int, original_height: int, max_pixels: int
     ) -> Tuple[int, int, int]:
         """
-        アスペクト比を維持しつつ、ピクセル数制限内で16の倍数の最適解像度を見つける
-        3D VAEの時空間圧縮（空間8×8×時間4×=256×圧縮）に最適化
+        Find optimal resolution maintaining aspect ratio within pixel limit with 16-pixel multiples
+        Optimized for 3D VAE spatiotemporal compression (spatial 8×8×temporal 4× = 256× compression)
 
         Returns:
             tuple: (optimal_width, optimal_height, actual_pixels)
         """
         original_aspect = self.calculate_aspect_ratio(original_width, original_height)
 
-        # 理論上の最大高さを計算
+        # Calculate theoretical maximum height
         # aspect_ratio * height * height <= max_pixels
         # height <= sqrt(max_pixels / aspect_ratio)
         max_height_theoretical = math.sqrt(max_pixels / original_aspect)
 
-        # 16の倍数で最大の高さを見つける
+        # Find maximum height that is a multiple of 16
         max_height_16multiple = int(max_height_theoretical // 16) * 16
 
         best_width = 0
         best_height = 0
         best_pixels = 0
 
-        # 高さを16の倍数で減らしながら最適解を探す
+        # Search for optimal solution by decreasing height in multiples of 16
         for height in range(
             max_height_16multiple, 15, -16
-        ):  # 16から始まって16の倍数で減少
-            # アスペクト比から幅を計算
+        ):  # Start from 16 and decrease in multiples of 16
+            # Calculate width from aspect ratio
             width_exact = original_aspect * height
 
-            # 16の倍数に調整（切り捨てと切り上げの両方を試す）
+            # Adjust to multiples of 16 (try both floor and ceil)
             width_down = int(width_exact // 16) * 16
             width_up = width_down + 16
 
-            # 両方のケースでピクセル数チェック
+            # Check pixel count for both cases
             for width in [width_down, width_up]:
                 if width > 0 and (width * height) <= max_pixels:
                     pixels = width * height
@@ -97,13 +97,13 @@ class PixelLimitResizer:
                         best_width = width
                         best_height = height
 
-        # 最適解が見つからない場合の安全策
+        # Safety fallback if no optimal solution found
         if best_width == 0 or best_height == 0:
-            # 最小サイズ（16x16）にフォールバック
-            if original_aspect >= 1:  # 横長または正方形
+            # Fallback to minimum size (16x16)
+            if original_aspect >= 1:  # Landscape or square
                 best_width = 16
                 best_height = 16
-            else:  # 縦長
+            else:  # Portrait
                 best_width = 16
                 best_height = 16
             best_pixels = best_width * best_height
@@ -117,27 +117,27 @@ class PixelLimitResizer:
         max_pixels=DEFAULT_MAX_PIXELS,
     ):
         """
-        ピクセル数制限内でアスペクト比を維持してリサイズ
-        16の倍数制約で3D VAEとの互換性を確保
+        Resize within pixel limit while maintaining aspect ratio
+        16-pixel multiple constraint ensures 3D VAE compatibility
         """
-        # 入力画像の形状を取得 [batch, height, width, channels]
+        # Get input image shape [batch, height, width, channels]
         B, H, W, C = image.shape
 
         original_width = W
         original_height = H
         original_pixels = original_width * original_height
 
-        # 最適な解像度を見つける
+        # Find optimal resolution
         target_width, target_height, target_pixels = self.find_optimal_resolution(
             original_width, original_height, max_pixels
         )
 
-        # リサイズが必要かチェック
+        # Check if resize is needed
         if original_width == target_width and original_height == target_height:
             out_image = image.clone()
         else:
-            # common_upscaleを使用してリサイズ
-            # テンソルの次元を調整: [B, H, W, C] -> [B, C, H, W]
+            # Resize using common_upscale
+            # Adjust tensor dimensions: [B, H, W, C] -> [B, C, H, W]
             out_image = image.clone()
             out_image = common_upscale(
                 out_image.movedim(-1, 1),
@@ -147,11 +147,11 @@ class PixelLimitResizer:
                 crop="disabled",
             ).movedim(1, -1)
 
-        # アスペクト比計算
+        # Calculate aspect ratios
         original_aspect = self.calculate_aspect_ratio(original_width, original_height)
         target_aspect = self.calculate_aspect_ratio(target_width, target_height)
 
-        # 詳細情報
+        # Detailed information
         resize_info = (
             f"Original: {original_width}x{original_height} "
             f"({original_pixels:,} pixels, aspect: {original_aspect:.4f}) → "
@@ -169,7 +169,7 @@ class PixelLimitResizer:
         return (out_image, target_width, target_height, target_aspect, resize_info)
 
 
-# ノード登録用のマッピング
+# Node registration mapping
 NODE_CLASS_MAPPINGS = {
     "PixelLimitResizer": PixelLimitResizer,
 }

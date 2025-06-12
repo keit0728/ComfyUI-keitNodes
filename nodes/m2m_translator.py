@@ -20,10 +20,10 @@ MODEL_CONFIGS = {
 
 class M2MTranslator:
     """
-    M2M-100多言語翻訳
+    M2M-100 multilingual translation
     """
 
-    # クラス変数でモデルを保持（複数ノードで共有）
+    # Class variables to hold models (shared across multiple nodes)
     _model: M2M100ForConditionalGeneration | None = None
     _tokenizer: Any | None = None
     _current_model_name: str | None = None
@@ -33,89 +33,89 @@ class M2MTranslator:
 
     @classmethod
     def INPUT_TYPES(cls):
-        # M2M-100でサポートする言語リスト（主要なものを抜粋）
+        # List of languages supported by M2M-100 (selected major ones)
         languages = [
             "auto_detect",
-            "ja",  # 日本語
-            "en",  # 英語
-            "zh",  # 中国語
-            "ko",  # 韓国語
-            "fr",  # フランス語
-            "de",  # ドイツ語
-            "es",  # スペイン語
-            "ru",  # ロシア語
-            "ar",  # アラビア語
-            "hi",  # ヒンディー語
-            "pt",  # ポルトガル語
-            "it",  # イタリア語
-            "tr",  # トルコ語
-            "th",  # タイ語
-            "vi",  # ベトナム語
-            "pl",  # ポーランド語
-            "nl",  # オランダ語
-            "sv",  # スウェーデン語
-            "da",  # デンマーク語
-            "no",  # ノルウェー語
-            "fi",  # フィンランド語
-            "cs",  # チェコ語
-            "hu",  # ハンガリー語
-            "ro",  # ルーマニア語
-            "bg",  # ブルガリア語
-            "hr",  # クロアチア語
-            "sk",  # スロバキア語
-            "sl",  # スロベニア語
-            "et",  # エストニア語
-            "lv",  # ラトビア語
-            "lt",  # リトアニア語
-            "uk",  # ウクライナ語
-            "be",  # ベラルーシ語
-            "mk",  # マケドニア語
-            "sq",  # アルバニア語
-            "sr",  # セルビア語
-            "bs",  # ボスニア語
-            "is",  # アイスランド語
-            "ga",  # アイルランド語
-            "cy",  # ウェールズ語
-            "ca",  # カタルーニャ語
-            "fa",  # ペルシア語
-            "ur",  # ウルドゥー語
-            "bn",  # ベンガル語
-            "ta",  # タミル語
-            "te",  # テルグ語
-            "kn",  # カンナダ語
-            "ml",  # マラヤーラム語
-            "gu",  # グジャラート語
-            "pa",  # パンジャーブ語
-            "mr",  # マラーティー語
-            "ne",  # ネパール語
-            "si",  # シンハラ語
-            "my",  # ビルマ語
-            "km",  # クメール語
-            "lo",  # ラオ語
-            "ka",  # ジョージア語
-            "hy",  # アルメニア語
-            "az",  # アゼルバイジャン語
-            "kk",  # カザフ語
-            "uz",  # ウズベク語
-            "mn",  # モンゴル語
-            "he",  # ヘブライ語
-            "yi",  # イディッシュ語
-            "sw",  # スワヒリ語
-            "zu",  # ズールー語
-            "xh",  # コサ語
-            "af",  # アフリカーンス語
-            "am",  # アムハラ語
-            "ha",  # ハウサ語
-            "ig",  # イボ語
-            "yo",  # ヨルバ語
-            "so",  # ソマリ語
-            "mg",  # マダガスカル語
-            "id",  # インドネシア語
-            "ms",  # マレー語
-            "tl",  # タガログ語
-            "jv",  # ジャワ語
-            "su",  # スンダ語
-            "ceb",  # セブアノ語
+            "ja",  # Japanese
+            "en",  # English
+            "zh",  # Chinese
+            "ko",  # Korean
+            "fr",  # French
+            "de",  # German
+            "es",  # Spanish
+            "ru",  # Russian
+            "ar",  # Arabic
+            "hi",  # Hindi
+            "pt",  # Portuguese
+            "it",  # Italian
+            "tr",  # Turkish
+            "th",  # Thai
+            "vi",  # Vietnamese
+            "pl",  # Polish
+            "nl",  # Dutch
+            "sv",  # Swedish
+            "da",  # Danish
+            "no",  # Norwegian
+            "fi",  # Finnish
+            "cs",  # Czech
+            "hu",  # Hungarian
+            "ro",  # Romanian
+            "bg",  # Bulgarian
+            "hr",  # Croatian
+            "sk",  # Slovak
+            "sl",  # Slovenian
+            "et",  # Estonian
+            "lv",  # Latvian
+            "lt",  # Lithuanian
+            "uk",  # Ukrainian
+            "be",  # Belarusian
+            "mk",  # Macedonian
+            "sq",  # Albanian
+            "sr",  # Serbian
+            "bs",  # Bosnian
+            "is",  # Icelandic
+            "ga",  # Irish
+            "cy",  # Welsh
+            "ca",  # Catalan
+            "fa",  # Persian
+            "ur",  # Urdu
+            "bn",  # Bengali
+            "ta",  # Tamil
+            "te",  # Telugu
+            "kn",  # Kannada
+            "ml",  # Malayalam
+            "gu",  # Gujarati
+            "pa",  # Punjabi
+            "mr",  # Marathi
+            "ne",  # Nepali
+            "si",  # Sinhala
+            "my",  # Burmese
+            "km",  # Khmer
+            "lo",  # Lao
+            "ka",  # Georgian
+            "hy",  # Armenian
+            "az",  # Azerbaijani
+            "kk",  # Kazakh
+            "uz",  # Uzbek
+            "mn",  # Mongolian
+            "he",  # Hebrew
+            "yi",  # Yiddish
+            "sw",  # Swahili
+            "zu",  # Zulu
+            "xh",  # Xhosa
+            "af",  # Afrikaans
+            "am",  # Amharic
+            "ha",  # Hausa
+            "ig",  # Igbo
+            "yo",  # Yoruba
+            "so",  # Somali
+            "mg",  # Malagasy
+            "id",  # Indonesian
+            "ms",  # Malay
+            "tl",  # Tagalog
+            "jv",  # Javanese
+            "su",  # Sundanese
+            "ceb",  # Cebuano
         ]
 
         return {
@@ -124,7 +124,7 @@ class M2MTranslator:
                 "source_language": (languages, {"default": "auto_detect"}),
                 "target_language": (
                     languages[1:],
-                    {"default": "en"},  # auto_detectを除外
+                    {"default": "en"},  # exclude auto_detect
                 ),
                 "model_size": (["418M", "1.2B"], {"default": "418M"}),
                 "device": (["auto", "cpu", "cuda"], {"default": "auto"}),
@@ -141,33 +141,33 @@ class M2MTranslator:
     CATEGORY = "🌍 Translation/M2M-100"
 
     def ensure_model_downloaded(self, model_size) -> str:
-        """モデルを事前にダウンロードし、ローカルパスを返す"""
+        """Download the model in advance and return the local path"""
         model_name = MODEL_CONFIGS[model_size]["model_name"]
         cache_path = os.path.join(
             self.base_cache_dir,
             MODEL_CONFIGS[model_size]["cache_dir"],
         )
 
-        # モデルが既にダウンロード済みかチェック
+        # Check if the model is already downloaded
         if os.path.exists(cache_path) and os.listdir(cache_path):
             print(f"Model {model_size} already exists at {cache_path}")
             return cache_path
 
-        # モデルをダウンロード
+        # Download the model
         print(f"Downloading M2M-100 {model_size} model to {cache_path}...")
         downloaded_path = snapshot_download(
             repo_id=model_name,
             local_dir=cache_path,
-            local_dir_use_symlinks=False,  # シンボリックリンクを使わずに実際のファイルをコピー
+            local_dir_use_symlinks=False,  # Copy actual files without using symbolic links
         )
         print(f"Model downloaded to {downloaded_path}")
         return cache_path
 
     def load_model(self, model_size, device) -> None:
-        """モデルを遅延ロード（初回のみ）"""
+        """Lazy load the model (first time only)"""
         model_name = MODEL_CONFIGS[model_size]["model_name"]
 
-        # デバイス決定
+        # Determine device
         if device == "auto":
             actual_device = "cuda" if torch.cuda.is_available() else "cpu"
         elif device == "cuda":
@@ -179,40 +179,40 @@ class M2MTranslator:
         else:
             actual_device = "cpu"
 
-        # モデルとデバイスの組み合わせが既にロードされている場合は何もしない
+        # Do nothing if the model and device combination is already loaded
         model_key = f"{model_name}_{actual_device}"
         if self._model is not None and self._current_model_name == model_key:
             return
 
-        # モデルを事前にダウンロード
+        # Download the model in advance
         local_model_path = self.ensure_model_downloaded(model_size)
 
-        # モデルロード処理
+        # Model loading process
         print(
             f"Loading M2M-100 {model_size} model from {local_model_path} on {actual_device}..."
         )
 
         if actual_device == "cuda":
             self._model = M2M100ForConditionalGeneration.from_pretrained(
-                local_model_path,  # ローカルパスを指定
+                local_model_path,  # specify local path
                 torch_dtype=torch.float16,
                 device_map="auto",
             ).cuda()
         else:
             self._model = M2M100ForConditionalGeneration.from_pretrained(
-                local_model_path,  # ローカルパスを指定
+                local_model_path,  # specify local path
                 torch_dtype=torch.float32,
             )
 
         self._tokenizer = M2M100Tokenizer.from_pretrained(
-            local_model_path,  # ローカルパスを指定
+            local_model_path,  # specify local path
         )
         self._current_model_name = model_key
         self.current_device = actual_device
         print(f"Model loaded successfully on {actual_device}!")
 
     def detect_language(self, text) -> tuple[str, float]:
-        """言語を自動検出"""
+        """Automatically detect language"""
         lang_code, confidence = langid.classify(text)
         return lang_code, confidence
 
@@ -225,8 +225,8 @@ class M2MTranslator:
         device,
         num_beams=5,
     ):
-        """翻訳"""
-        # テキストが空白の場合はそのまま返す
+        """Translation"""
+        # Return as is if text is empty
         if not text or text.strip() == "":
             return (
                 text,
@@ -234,7 +234,7 @@ class M2MTranslator:
                 1.0,
             )
 
-        # 言語自動検出
+        # Automatic language detection
         if source_language == "auto_detect":
             source_language, confidence = self.detect_language(text)
             print(
@@ -243,11 +243,11 @@ class M2MTranslator:
         else:
             confidence = 1.0
 
-        # 同じ言語の場合はそのまま返す
+        # Return as is if same language
         if source_language == target_language:
             return (text, source_language, confidence)
 
-        # 翻訳実行
+        # Execute translation
         self.load_model(model_size, device)
         self._tokenizer.src_lang = source_language
         inputs = self._tokenizer(
