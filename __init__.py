@@ -1,14 +1,14 @@
 from .nodes.m2m_translator import M2MTranslator
-from .nodes.wan_video_optimal_resizer import WanVideoOptimalResizer
+from .nodes.pixel_limit_resizer import PixelLimitResizer
 
 NODE_CLASS_MAPPINGS = {
     "M2MTranslator": M2MTranslator,
-    "WanVideoOptimalResizer": WanVideoOptimalResizer,
+    "PixelLimitResizer": PixelLimitResizer,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "M2MTranslator": "🌍 M2M-100 Translator",
-    "WanVideoOptimalResizer": "🎬 WanVideo Optimal Resizer",
+    "PixelLimitResizer": "🎯 Pixel Limit Resizer (16×)",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
