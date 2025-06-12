@@ -1,5 +1,7 @@
 # ComfyUI-keitNodes
 
+**Languages:** [English](README.md) | [日本語](README.ja.md)
+
 Custom nodes for ComfyUI by keit.
 
 ## Features
@@ -19,25 +21,25 @@ A powerful multilingual translation node powered by Meta's M2M-100 (Many-to-Many
 **Supported Languages Include:**
 - Asian: Japanese (ja), Chinese (zh), Korean (ko), Thai (th), Vietnamese (vi), Hindi (hi), etc.
 - European: English (en), French (fr), German (de), Spanish (es), Russian (ru), Italian (it), etc.
-- African: Arabic (ar), Swahili (sw), Amharic (am), Hausa (ha), etc.
+- African: Arabic (ar), Swahili (sw), Amharica (am), Hausa (ha), etc.
 - And many more...
 
-### 🎬 WanVideo Optimal Resizer
+### 🎯 Pixel Limit Resizer (16×)
 
-A specialized image resizing node optimized for WanVideo, which intelligently resizes images to the most suitable resolution based on aspect ratio matching.
+An intelligent image resizing node that maintains aspect ratio while constraining pixel count and optimizing for 16-pixel multiple resolutions. Designed for 3D VAE spatiotemporal compression compatibility.
 
 **Key Features:**
-- **Smart Resolution Selection**: Automatically selects the best resolution from supported WanVideo formats
-- **Aspect Ratio Optimization**: Finds the closest aspect ratio match to minimize distortion
-- **Multiple Upscale Methods**: Supports various interpolation methods (nearest-exact, bilinear, area, bicubic, lanczos)
-- **Detailed Output Information**: Returns resized image along with resolution metrics and aspect ratio data
+- **Pixel Count Limiting**: Calculates optimal resolution within specified pixel count constraints
+- **Aspect Ratio Preservation**: Maintains original image aspect ratio as closely as possible
+- **16-Pixel Multiple Constraint**: Adjusts width and height to be multiples of 16 (3D VAE compatible)
+- **Multiple Upscale Methods**: Supports nearest-exact, bilinear, area, bicubic, lanczos interpolation methods
+- **Detailed Output Information**: Provides resized image along with resolution metrics and aspect ratio data
 
-**Supported Resolutions:**
-- **1:1 Square**: 640×640 (perfect for square content)
-- **2:3 Portrait**: 512×768 (ideal for vertical content)
-- **3:2 Landscape**: 768×512 (great for horizontal content)
-- **16:9 Landscape**: 854×480 (standard widescreen format)
-- **9:16 Portrait**: 480×854 (mobile-friendly vertical format)
+**Technical Specifications:**
+- **Default Max Pixels**: 728,320 (equivalent to 1138×640)
+- **Minimum Resolution**: 16×16
+- **Maximum Resolution**: 2048×2048
+- **3D VAE Optimization**: Compatible with spatiotemporal compression (256× compression ready)
 
 ## Installation
 
