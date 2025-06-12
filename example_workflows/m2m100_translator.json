@@ -5,6 +5,44 @@
   "last_link_id": 2,
   "nodes": [
     {
+      "id": 3,
+      "type": "easy showAnything",
+      "pos": [
+        -952.0576782226562,
+        163.2786102294922
+      ],
+      "size": [
+        324.7765808105469,
+        98.33563232421875
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "7ef0612ce7552968146ed41f5863a1638bf33412",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "A red-haired girl is walking straight towards the camera."
+      ]
+    },
+    {
       "id": 1,
       "type": "M2MTranslator",
       "pos": [
@@ -13,7 +51,7 @@
       ],
       "size": [
         400,
-        224
+        248
       ],
       "flags": {},
       "order": 1,
@@ -57,45 +95,8 @@
         "auto_detect",
         "en",
         "418M",
+        "cpu",
         5
-      ]
-    },
-    {
-      "id": 3,
-      "type": "easy showAnything",
-      "pos": [
-        -952.0576782226562,
-        163.2786102294922
-      ],
-      "size": [
-        324.7765808105469,
-        98.33563232421875
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "anything",
-          "shape": 7,
-          "type": "*",
-          "link": 2
-        }
-      ],
-      "outputs": [
-        {
-          "name": "output",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-easy-use",
-        "ver": "7ef0612ce7552968146ed41f5863a1638bf33412",
-        "Node name for S&R": "easy showAnything"
-      },
-      "widgets_values": [
-        "A red-haired girl is walking straight towards the camera."
       ]
     },
     {
@@ -156,8 +157,8 @@
     "ds": {
       "scale": 0.9849732675807974,
       "offset": [
-        2111.984916149701,
-        89.0097827403284
+        2076.4509568515327,
+        101.19285449970042
       ]
     },
     "frontendVersion": "1.20.7",
