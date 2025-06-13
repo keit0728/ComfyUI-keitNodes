@@ -3,7 +3,7 @@ import math
 from comfy.utils import common_upscale
 
 # Maximum pixel count limit
-DEFAULT_MAX_PIXELS = 728320  # Equivalent to 1138x640
+DEFAULT_MAX_PIXELS = 589824  # Approximately equivalent to 1024x576 pixels
 
 
 class PixelLimitResizer:
@@ -37,7 +37,7 @@ class PixelLimitResizer:
                         "min": 16 * 16,
                         "max": 2048 * 2048,
                         "step": 1,
-                        "tooltip": "Maximum pixel count limit (width × height). The image will be resized to stay within this limit while maintaining aspect ratio and 16-pixel alignment.",
+                        "tooltip": "Maximum pixel count limit (width × height). The image will be resized to stay within this limit while maintaining aspect ratio and 16-pixel alignment. Default: 589824 pixels (ex: 1024×576)",
                     },
                 ),
             },
