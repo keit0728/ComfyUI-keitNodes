@@ -36,7 +36,7 @@ An intelligent image resizing node that maintains aspect ratio while constrainin
 - **Detailed Output Information**: Provides resized image along with resolution metrics and aspect ratio data
 
 **Technical Specifications:**
-- **Default Max Pixels**: 728,320 (equivalent to 1138×640)
+- **Default Max Pixels**: 589,824 (equivalent to 1024×576)
 - **Minimum Resolution**: 16×16
 - **Maximum Resolution**: 2048×2048
 - **3D VAE Optimization**: Compatible with spatiotemporal compression (256× compression ready)
