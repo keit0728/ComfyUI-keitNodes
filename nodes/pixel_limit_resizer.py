@@ -47,7 +47,7 @@ class PixelLimitResizer:
     RETURN_NAMES = ("image", "width", "height", "aspect_ratio", "resize_info")
 
     FUNCTION = "resize_with_pixel_limit"
-    CATEGORY = "🖼️ Image/Resize"
+    CATEGORY = "keitNodes"
 
     def calculate_aspect_ratio(self, width: int, height: int) -> float:
         """Calculate aspect ratio"""

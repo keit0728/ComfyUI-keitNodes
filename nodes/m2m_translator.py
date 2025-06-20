@@ -138,7 +138,7 @@ class M2MTranslator:
     RETURN_NAMES = ("translated_text", "detected_language", "confidence")
 
     FUNCTION = "translate"
-    CATEGORY = "🌍 Translation/M2M-100"
+    CATEGORY = "keitNodes"
 
     def ensure_model_downloaded(self, model_size) -> str:
         """Download the model in advance and return the local path"""
