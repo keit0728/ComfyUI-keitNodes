@@ -117,13 +117,12 @@ class WanVideoOptimalResizer:
 
         # リサイズが必要かチェック
         if original_width == target_width and original_height == target_height:
-            out_image = image.clone()
+            out_image = image
         else:
             # common_upscaleを使用してリサイズ
             # テンソルの次元を調整: [B, H, W, C] -> [B, C, H, W]
-            out_image = image.clone()
             out_image = common_upscale(
-                out_image.movedim(-1, 1),
+                image.movedim(-1, 1),
                 target_width,
                 target_height,
                 upscale_method,
