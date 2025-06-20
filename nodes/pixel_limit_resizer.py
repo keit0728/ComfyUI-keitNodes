@@ -167,13 +167,3 @@ class PixelLimitResizer:
         print(f"3D VAE compatibility: ✓ (256× compression ready)")
 
         return (out_image, target_width, target_height, target_aspect, resize_info)
-
-
-# Node registration mapping
-NODE_CLASS_MAPPINGS = {
-    "PixelLimitResizer": PixelLimitResizer,
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "PixelLimitResizer": "Pixel Limit Resizer (16× Multiple)",
-}
