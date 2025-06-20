@@ -7,8 +7,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "M2MTranslator": "🌍 M2M-100 Translator",
-    "PixelLimitResizer": "🎯 Pixel Limit Resizer (16×)",
+    "M2MTranslator": "M2MTranslator",
+    "PixelLimitResizer": "PixelLimitResizer",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
