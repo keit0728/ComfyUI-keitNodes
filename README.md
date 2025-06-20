@@ -75,6 +75,25 @@ A preset resolution conversion node optimized for the WanVideo platform. Analyze
 1. **Aspect Ratio Priority**: Identifies candidates with aspect ratios closest to the original image
 2. **Resolution Optimization**: Selects the candidate with pixel count closest to the original among optimal aspect ratio matches
 
+### 🔍 WanVideo Resolution Finder
+
+An optimal resolution calculation node for the WanVideo platform. Uses the same algorithm as WanVideo Optimal Resizer but only returns the optimal resolution values without performing the actual resize.
+
+**Key Features:**
+- **Resolution Calculation Only**: Outputs optimal width and height values without resizing the image
+- **Identical Algorithm**: Uses the same selection logic as WanVideo Optimal Resizer
+- **Preset Support**: Choose between 480p and 720p presets
+- **Lightweight Processing**: Fast operation as no image processing is performed
+
+**Use Cases:**
+- When you need to check optimal resolution before resizing
+- When you want to use resolution information in other nodes
+- When determining unified resolution for batch processing
+
+**Output:**
+- width (INT): Optimal width in pixels
+- height (INT): Optimal height in pixels
+
 ## Installation
 
 ### Prerequisites
