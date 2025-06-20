@@ -94,6 +94,41 @@ An optimal resolution calculation node for the WanVideo platform. Uses the same 
 - width (INT): Optimal width in pixels
 - height (INT): Optimal height in pixels
 
+### 📐 Aspect Ratio Resolution Finder
+
+A resolution calculation node that maintains the original aspect ratio while adjusting to a specified height preset. This node only calculates the optimal width and height values without performing actual image resizing.
+
+**Key Features:**
+- **Height Preset Support**: Supports various height presets from 144p to 2160p
+- **Aspect Ratio Preservation**: Calculates width automatically to maintain the original aspect ratio
+- **No Image Processing**: Only returns resolution values, making it extremely fast
+- **Precise Calculations**: Provides exact pixel dimensions based on aspect ratio
+
+**Available Height Presets:**
+- 144p (144 pixels)
+- 240p (240 pixels)
+- 360p (360 pixels)
+- 480p (480 pixels)
+- 540p (540 pixels)
+- 576p (576 pixels)
+- 720p (720 pixels)
+- 900p (900 pixels)
+- 1080p (1080 pixels)
+- 1200p (1200 pixels)
+- 1440p (1440 pixels)
+- 1600p (1600 pixels)
+- 2160p (2160 pixels)
+
+**Use Cases:**
+- When you need to calculate resolution maintaining aspect ratio before processing
+- When standardizing multiple images to the same height while preserving their aspect ratios
+- When planning resolution requirements for video processing pipelines
+- When you need resolution information for other nodes without actual resizing
+
+**Output:**
+- width (INT): Calculated width in pixels (maintaining aspect ratio)
+- height (INT): Selected height preset in pixels
+
 ## Installation
 
 ### Prerequisites

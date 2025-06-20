@@ -1,4 +1,3 @@
-from typing import Tuple
 from .wan_video_optimal_resizer import WanVideoOptimalResizer
 
 
