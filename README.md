@@ -41,6 +41,40 @@ An intelligent image resizing node that maintains aspect ratio while constrainin
 - **Maximum Resolution**: 2048×2048
 - **3D VAE Optimization**: Compatible with spatiotemporal compression (256× compression ready)
 
+### 📺 WanVideo Optimal Resizer
+
+A preset resolution conversion node optimized for the WanVideo platform. Analyzes input image aspect ratios and automatically selects the most suitable resolution from predefined presets for resizing.
+
+**Key Features:**
+- **Preset Resolutions**: Supports two presets - 480p and 720p
+- **Multiple Aspect Ratio Support**: Each preset supports 5 different aspect ratios:
+  - 16:9 vertical & horizontal
+  - 1:1 square
+  - Landscape (1.29:1 / 1.31:1)
+  - Portrait (1:1.29 / 1:1.31)
+- **Intelligent Selection**: Two-stage selection algorithm considering aspect ratio similarity and pixel count difference
+- **Detailed Analysis**: Outputs comprehensive statistics before and after resizing
+
+**Preset Resolutions:**
+
+**480p Preset:**
+- 480×832 (16:9 vertical)
+- 832×480 (16:9 horizontal)
+- 624×624 (1:1 square)
+- 704×544 (1.29:1 landscape)
+- 544×704 (1:1.29 portrait)
+
+**720p Preset:**
+- 720×1280 (16:9 vertical)
+- 1280×720 (16:9 horizontal)
+- 960×960 (1:1 square)
+- 1088×832 (1.31:1 landscape)
+- 832×1088 (1:1.31 portrait)
+
+**Selection Algorithm:**
+1. **Aspect Ratio Priority**: Identifies candidates with aspect ratios closest to the original image
+2. **Resolution Optimization**: Selects the candidate with pixel count closest to the original among optimal aspect ratio matches
+
 ## Installation
 
 ### Prerequisites
